@@ -21,7 +21,7 @@ namespace DockerAdmin.Controllers
             {
                 ActiveContainers = _dockerService.GetAllRunningContainers(),
                 StoppedContainers = _dockerService.GetAllStoppedContainers()
-            ));
+            });
         }
 
         [Route("start/{id}")]
@@ -48,7 +48,12 @@ namespace DockerAdmin.Controllers
         [Route("details/{id}")]
         public IActionResult DetailsContainer(string id)
         {
-            return RedirectToAction("Index");
+            return View("Details", new ContainerDetailsViewModel
+            {
+                Resume = _dockerService.GetContainerResumeInfo(id),
+                Metrics = _dockerService.GetContainerMetrics(id),
+                Specs = _dockerService.GetContainerSpecs(id)
+            });
         }
 
         [Route("logs/{id}")]

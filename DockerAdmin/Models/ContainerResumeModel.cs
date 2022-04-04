@@ -1,6 +1,6 @@
 ﻿namespace DockerAdmin.Models
 {
-    public class ContainerModel
+    public class ContainerResumeModel
     {
         public string Id { get; set; }
         public string Image { get; set; }

@@ -4,7 +4,7 @@ namespace DockerAdmin.ViewModels
 {
     public class ActiveContainersViewModel
     {
-        public IEnumerable<ContainerModel> ActiveContainers { get; set; }
-        public IEnumerable<ContainerModel> StoppedContainers { get; set; }
+        public IEnumerable<ContainerResumeModel> ActiveContainers { get; set; }
+        public IEnumerable<ContainerResumeModel> StoppedContainers { get; set; }
     }
 }

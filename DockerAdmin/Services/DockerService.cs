@@ -9,6 +9,9 @@ namespace DockerAdmin.Services
     {
         private readonly string CommandContainerListAllRunning = "docker container ls -f \\\"status=running\\\"";
         private readonly string CommandContainerListAllStopped = "docker container ls -f \\\"status=exited\\\"";
+        private readonly string CommandContainerInfo = "docker container ls -a | grep {0}";
+        private readonly string CommandContainerMetrics = "docker container stats {0} --no-stream";
+        private readonly string CommandContainerSpecs = "docker container inspect {0}";
         private readonly string CommandContainerLogs = "docker container logs {0}";
         private readonly string CommandContainerRestart = "docker container restart {0}";
         private readonly string CommandContainerStart = "docker container start {0}";
@@ -21,9 +24,9 @@ namespace DockerAdmin.Services
             _logger = logger;
         }
 
-        public IEnumerable<ContainerModel> GetAllRunningContainers()
+        public IEnumerable<ContainerResumeModel> GetAllRunningContainers()
         {
-            var runningContainers = new List<ContainerModel>();
+            var runningContainers = new List<ContainerResumeModel>();
 
             try
             {
@@ -36,7 +39,7 @@ namespace DockerAdmin.Services
                     var parts = Regex.Split(container, @"[\s+]{2,}");
 
                     if (parts.Length == 7)
-                        runningContainers.Add(new ContainerModel
+                        runningContainers.Add(new ContainerResumeModel
                         {
                             Id = parts[0],
                             Image = parts[1],
@@ -56,9 +59,9 @@ namespace DockerAdmin.Services
             return runningContainers;
         }
 
-        public IEnumerable<ContainerModel> GetAllStoppedContainers()
+        public IEnumerable<ContainerResumeModel> GetAllStoppedContainers()
         {
-            var runningContainers = new List<ContainerModel>();
+            var runningContainers = new List<ContainerResumeModel>();
 
             try
             {
@@ -71,7 +74,7 @@ namespace DockerAdmin.Services
                     var parts = Regex.Split(container, @"[\s+]{2,}");
 
                     if (parts.Length == 6 && parts[1].Contains(":"))
-                        runningContainers.Add(new ContainerModel
+                        runningContainers.Add(new ContainerResumeModel
                         {
                             Id = parts[0],
                             Image = parts[1],
@@ -94,12 +97,95 @@ namespace DockerAdmin.Services
         {
             try
             {
-                string logs = ExecuteDockerCommand(string.Format(CommandContainerLogs, id));
-                return logs?.TrimStart();
+                return ExecuteDockerCommand(string.Format(CommandContainerLogs, id));
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Fail to get container {id} logs: {ex.Message}");
+            }
+
+            return null;
+        }
+
+        public ContainerMetricsModel GetContainerMetrics(string id)
+        {
+            try
+            {
+                var containerStatsString = ExecuteDockerCommand(string.Format(CommandContainerMetrics, id));
+
+                var containerStatsList = containerStatsString.Split("\n").ToList().Skip(1);
+
+                foreach (var containerStats in containerStatsList)
+                {
+                    var parts = Regex.Split(containerStats, @"[\s+]{2,}");
+
+                    if (parts.Length == 8)
+                    {
+                        var memoryParts = parts[3].Split("/");
+                        var networkParts = parts[5].Split("/");
+                        var diskParts = parts[6].Split("/");
+
+                        return new ContainerMetricsModel
+                        {
+                            Id = parts[0],
+                            Name = parts[1],
+                            CpuUsage = parts[2],
+                            MemoryUsage = memoryParts[0],
+                            MemoryLimit = memoryParts[1],
+                            MemoryPercent = parts[4],
+                            NetworkInput = networkParts[0],
+                            NetworkOutput = networkParts[1],
+                            DiskInput = diskParts[0],
+                            DiskOutput = diskParts[1]
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fail to get container {id} stats: {ex.Message}");
+            }
+
+            return default;
+        }
+
+        public ContainerResumeModel GetContainerResumeInfo(string id)
+        {
+            try
+            {
+                var resumeAsString = ExecuteDockerCommand(string.Format(CommandContainerInfo, id));
+
+                var parts = Regex.Split(resumeAsString, @"[\s+]{2,}");
+
+                if (parts.Length == 7)
+                    return new ContainerResumeModel
+                    {
+                        Id = parts[0],
+                        Image = parts[1],
+                        Command = parts[2],
+                        Created = parts[3],
+                        Status = parts[4],
+                        Ports = parts[5],
+                        Names = parts[6],
+                    };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fail to get container {id} resumed info: {ex.Message}");
+            }
+
+            return default;
+        }
+
+        public string GetContainerSpecs(string id)
+        {
+            try
+            {
+                return ExecuteDockerCommand(string.Format(CommandContainerSpecs, id));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fail to get container {id} specs: {ex.Message}");
             }
 
             return null;

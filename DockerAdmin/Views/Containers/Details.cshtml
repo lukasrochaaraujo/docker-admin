@@ -1,0 +1,52 @@
+﻿@model DockerAdmin.ViewModels.ContainerDetailsViewModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1 class="display-6">Container details</h1>
+
+<h6>Resume</h6>
+<dl class="row" style="width: 100%; background-color: #f5f5f5; margin: 10px 0">
+    <dt class="col-sm-3">ID</dt>
+    <dd class="col-sm-9">@Model.Resume.Id</dd>
+
+    <dt class="col-sm-3">Name</dt>
+    <dd class="col-sm-9">@Model.Resume.Names</dd>
+
+    <dt class="col-sm-3">Image</dt>
+    <dd class="col-sm-9">@Model.Resume.Image</dd>
+
+    <dt class="col-sm-3">Created</dt>
+    <dd class="col-sm-9">@Model.Resume.Created</dd>
+
+    <dt class="col-sm-3">Status</dt>
+    <dd class="col-sm-9">@Model.Resume.Status</dd>
+
+    <dt class="col-sm-3">Ports</dt>
+    <dd class="col-sm-9">@Model.Resume.Ports</dd>
+</dl>
+
+<h6>Metrics</h6>
+<dl class="row" style="width: 100%; background-color: #f5f5f5; margin: 10px 0">
+    <dt class="col-sm-3">CUP %</dt>
+    <dd class="col-sm-9">@Model.Metrics.CpuUsage</dd>
+
+    <dt class="col-sm-3">Memory %</dt>
+    <dd class="col-sm-9">@Model.Metrics.MemoryPercent</dd>
+
+    <dt class="col-sm-3">Memory Usage / Limit</dt>
+    <dd class="col-sm-9">@Model.Metrics.MemoryUsage / @Model.Metrics.MemoryLimit</dd>
+
+    <dt class="col-sm-3">Network I/O</dt>
+    <dd class="col-sm-9">@Model.Metrics.NetworkInput / @Model.Metrics.NetworkOutput</dd>
+
+    <dt class="col-sm-3">Disk I/O</dt>
+    <dd class="col-sm-9">@Model.Metrics.DiskInput / @Model.Metrics.DiskOutput</dd>
+</dl>
+
+<h6>Specs</h6>
+<pre style="width: 100%; max-height: 300px; background-color: #f5f5f5">
+@Model.Specs
+</pre>
+
+<a class="btn btn-light btn-sm" asp-action="Index"> back </a>
