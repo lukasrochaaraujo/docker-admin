@@ -91,6 +91,18 @@
                             title="Start container">
                             <i class="bi bi-play-circle"></i>
                         </a>
+                        <a class="btn btn-secondary btn-sm" 
+                            asp-action="LogsContainer"
+                            asp-route-id="@container.Id"
+                            title="Container logs">
+                            <i class="bi bi-body-text"></i>
+                        </a>
+                        <a class="btn btn-info btn-sm" 
+                            asp-action="DetailsContainer"
+                            asp-route-id="@container.Id"
+                            title="Container details">
+                            <i class="bi bi-info-lg"></i>
+                        </a>
                     </td>
                 </tr>
             }
