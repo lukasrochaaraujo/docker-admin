@@ -16,6 +16,7 @@ namespace DockerAdmin.Services
         private readonly string CommandContainerRestart = "docker container restart {0}";
         private readonly string CommandContainerStart = "docker container start {0}";
         private readonly string CommandContainerStop = "docker container stop {0}";
+        private readonly string CommandPrune = "docker {0} prune -f";
 
         private readonly ILogger<DockerService> _logger;
 
@@ -225,6 +226,34 @@ namespace DockerAdmin.Services
             {
                 _logger.LogError($"Fail to stop container {id}: {ex.Message}");
             }
+        }
+
+        public string Prune(PruneOption option)
+        {
+            try
+            {
+                string commandResult = ExecuteDockerCommand(string.Format(CommandPrune, option.ToString().ToLower()));
+
+                if (string.IsNullOrWhiteSpace(commandResult))
+                    return "Success!";
+
+                if (commandResult.Split("\n").Length <= 1)
+                    return $"Sucess: {commandResult}!";
+
+                return "Success: " + commandResult
+                    .Split("\n")
+                    .ToHashSet()
+                    .Reverse()
+                    .Skip(1)
+                    .First()
+                    + "!";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fail to prune images: {ex.Message}");
+            }
+
+            return "Fail!";
         }
 
         private string ExecuteDockerCommand(string command)

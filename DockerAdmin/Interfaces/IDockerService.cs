@@ -13,5 +13,6 @@ namespace DockerAdmin.Interfaces
         public void StartContainer(string id);
         public void StopContainer(string id);
         public void RestartContainer(string id);
+        public string Prune(PruneOption option);
     }
 }
