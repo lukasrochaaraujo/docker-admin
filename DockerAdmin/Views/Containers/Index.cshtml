@@ -1,0 +1,53 @@
+﻿@model DockerAdmin.ViewModels.ActiveContainersViewModel
+@{
+    ViewData["Title"] = "Dash";
+}
+
+<h2>Running containers</h2>
+<div class="text-center">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>CONTAINER ID</th>
+                    <th>IMAGE</th>
+                    <th>CREATED</th>
+                    <th>STATUS</th>
+                    <th>PORTS</th>
+                    <th>NAMES</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var container in Model.ActiveContainers)
+                {
+                    <tr>
+                        <td>@container.Id</td>
+                        <td>@container.Image</td>
+                        <td>@container.Created</td>
+                        <td>@container.Status</td>
+                        <td>@container.Ports</td>
+                        <td>@container.Names</td>
+                        <td>
+                            <a class="btn btn-danger btn-sm" 
+                               asp-action="RestartContainer"
+                               asp-route-id="@container.Id">
+                               restart
+                           </a>
+                           <a class="btn btn-info btn-sm" 
+                               asp-action="MetricsContainer"
+                               asp-route-id="@container.Id">
+                               metrics
+                           </a>
+                           <a class="btn btn-secondary btn-sm" 
+                               asp-action="LogsContainer"
+                               asp-route-id="@container.Id">
+                               logs
+                           </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

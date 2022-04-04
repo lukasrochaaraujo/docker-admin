@@ -1,0 +1,15 @@
+﻿@model DockerAdmin.ViewModels.ContainerLogsViewModel
+@{
+    ViewData["Title"] = "Logs";
+}
+
+<h2>
+    Container logs [@Model.ContainerId]
+    <a class="btn btn-link btn-sm" asp-action="Index">
+        back
+    </a>
+</h2>
+
+<pre style="background-color: #101010; color: #fff">
+@Model.Logs
+</pre>
