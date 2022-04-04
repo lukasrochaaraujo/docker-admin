@@ -18,7 +18,7 @@
     </a>
     @if(!string.IsNullOrWhiteSpace(Model.Images))
     {
-        <small> - @Model.Images</small>
+        <pre class="cleanup-message">@Model.Images</pre>
     }
   </div>
 </div>
@@ -37,7 +37,7 @@
     </a>
     @if(!string.IsNullOrWhiteSpace(Model.Containers))
     {
-        <small> - @Model.Containers</small>
+        <pre class="cleanup-message">@Model.Containers</pre>
     }
   </div>
 </div>
@@ -55,7 +55,7 @@
     </a>
     @if(!string.IsNullOrWhiteSpace(Model.Volumes))
     {
-        <small> - @Model.Volumes</small>
+        <pre class="cleanup-message">@Model.Volumes</pre>
     }
   </div>
 </div>
@@ -73,7 +73,7 @@
     </a>
     @if(!string.IsNullOrWhiteSpace(Model.Networks))
     {
-        <small> - @Model.Networks</small>
+        <pre class="cleanup-message">@Model.Networks</pre>
     }
   </div>
 </div>
@@ -90,7 +90,7 @@
     </a>
     @if(!string.IsNullOrWhiteSpace(Model.System))
     {
-        <small> - @Model.System</small>
+        <pre class="cleanup-message">@Model.System</pre>
     }
   </div>
 </div>

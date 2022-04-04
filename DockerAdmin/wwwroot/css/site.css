@@ -16,3 +16,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+pre.cleanup-message {
+    width: 100%;
+    height: 75px;
+    background-color: #e5e5e5;
+    margin: 5px 0 0 0;
+}

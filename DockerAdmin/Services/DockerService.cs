@@ -232,21 +232,12 @@ namespace DockerAdmin.Services
         {
             try
             {
-                string commandResult = ExecuteDockerCommand(string.Format(CommandPrune, option.ToString().ToLower()));
+                var pruneResult = ExecuteDockerCommand(string.Format(CommandPrune, option.ToString().ToLower()));
 
-                if (string.IsNullOrWhiteSpace(commandResult))
-                    return "Success!";
+                if (string.IsNullOrWhiteSpace(pruneResult))
+                    return "Total reclaimed space: 0B";
 
-                if (commandResult.Split("\n").Length <= 1)
-                    return $"Sucess: {commandResult}!";
-
-                return "Success: " + commandResult
-                    .Split("\n")
-                    .ToHashSet()
-                    .Reverse()
-                    .Skip(1)
-                    .First()
-                    + "!";
+                return pruneResult;
             }
             catch (Exception ex)
             {
