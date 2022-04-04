@@ -13,7 +13,7 @@
         This command allows you to clean up unused images. Only cleans up dangling images. 
         A dangling image is one that is not tagged and is not referenced by any container.
     </p>
-    <a class="btn btn-outline-danger btn-sm" asp-controller="Cleanup" asp-action="PruneImages"> 
+    <a class="btn btn-outline-danger btn-sm" asp-action="Prune" asp-route-option="@PruneOption.Image"> 
         <i class="bi bi-trash"></i> Proceed to Prune images
     </a>
     @if(!string.IsNullOrWhiteSpace(Model.Images))
@@ -32,7 +32,7 @@
         You may be surprised how many containers exist, especially on a development system! 
         A stopped container’s writable layers still take up disk space.
     </p>
-    <a class="btn btn-outline-danger btn-sm" asp-action="PruneContainers"> 
+    <a class="btn btn-outline-danger btn-sm" asp-action="Prune" asp-route-option="@PruneOption.Container"> 
         <i class="bi bi-trash"></i> Proceed to Prune containers
     </a>
     @if(!string.IsNullOrWhiteSpace(Model.Containers))
@@ -50,7 +50,7 @@
         Volumes can be used by one or more containers, and take up space on the Docker host. 
         Volumes are never removed automatically, because to do so could destroy data.
     </p>
-    <a class="btn btn-outline-danger btn-sm" asp-action="PruneVolumes"> 
+    <a class="btn btn-outline-danger btn-sm" asp-action="Prune" asp-route-option="@PruneOption.Volume"> 
         <i class="bi bi-trash"></i> Proceed to Prune volumes
     </a>
     @if(!string.IsNullOrWhiteSpace(Model.Volumes))
@@ -68,7 +68,7 @@
         Docker networks don’t take up much disk space, but they do create iptables rules, 
         bridge network devices, and routing table entries.
     </p>
-    <a class="btn btn-outline-danger btn-sm" asp-action="PruneNetworks"> 
+    <a class="btn btn-outline-danger btn-sm" asp-action="Prune" asp-route-option="@PruneOption.Network">
         <i class="bi bi-trash"></i> Proceed to Prune network
     </a>
     @if(!string.IsNullOrWhiteSpace(Model.Networks))
@@ -85,7 +85,7 @@
     <p class="card-text">
         This is a command that prunes images, containers, and networks
     </p>
-    <a class="btn btn-outline-danger btn-sm" asp-action="PruneSystem"> 
+    <a class="btn btn-outline-danger btn-sm" asp-action="Prune" asp-route-option="@PruneOption.System">  
         <i class="bi bi-trash"></i> Proceed to Prune everything
     </a>
     @if(!string.IsNullOrWhiteSpace(Model.System))
