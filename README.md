@@ -11,19 +11,6 @@ Created with asp.net core mvc 6.0.
  - Prune docker images, containers, volumes, networks and system.
  - No need to use the terminal for common tasks
 
-## Usage
-
-Make sure you have Docker installed and execute the below steps:
-
-```
-$ git clone https://github.com/lukasrochaaraujo/docker-admin.git
-$ cd ./docker-admin
-$ chmod +x ./DockerAdmin
-$ ./DockerAdmin
-```
-
-Now visit http://localhost:5000.
-
 ## Images
 
 <p align="center">
