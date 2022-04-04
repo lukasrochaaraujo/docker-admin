@@ -1,0 +1,47 @@
+﻿@model DockerAdmin.ViewModels.AvailableImagesViewModel
+@{
+    ViewData["Title"] = "Images";
+}
+
+<h1 class="display-6">Images</h1>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>REPOSITORY</th>
+                <th>TAG</th>
+                <th>IMAGE ID</th>
+                <th>CREATED</th>
+                <th>SIZE</th>
+                <th>ACTIONS</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var image in Model.Images)
+            {
+                <tr>
+                    <td>@image.Repository</td>
+                    <td>@image.Tag</td>
+                    <td>@image.Id</td>
+                    <td>@image.Created</td>
+                    <td>@image.Size</td>
+                    <td>
+                        <a class="btn btn-warning btn-sm" 
+                            asp-action="UpdateImage"
+                            asp-route-id="@image.Id"
+                            title="Update image">
+                            <i class="bi bi-cloud-arrow-down"></i>
+                        </a>
+                        <a class="btn btn-danger btn-sm" 
+                            asp-action="DeleteImage"
+                            asp-route-id="@image.Id"
+                            title="Delete image">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

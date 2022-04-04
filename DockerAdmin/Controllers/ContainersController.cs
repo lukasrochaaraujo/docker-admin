@@ -17,7 +17,7 @@ namespace DockerAdmin.Controllers
 
         public IActionResult Index()
         {
-            return View(new ActiveContainersViewModel
+            return View(new AvailableContainersViewModel
             {
                 ActiveContainers = _dockerService.GetAllRunningContainers(),
                 StoppedContainers = _dockerService.GetAllStoppedContainers()

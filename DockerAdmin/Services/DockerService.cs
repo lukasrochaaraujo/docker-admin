@@ -16,6 +16,9 @@ namespace DockerAdmin.Services
         private readonly string CommandContainerRestart = "docker container restart {0}";
         private readonly string CommandContainerStart = "docker container start {0}";
         private readonly string CommandContainerStop = "docker container stop {0}";
+        private readonly string CommandImageList = "docker image ls";
+        private readonly string CommandImageDelete = "docker image rm {0}";
+        private readonly string CommandImageUpdate = "docker pull {0}";
         private readonly string CommandPrune = "docker {0} prune -f";
 
         private readonly ILogger<DockerService> _logger;
@@ -241,10 +244,69 @@ namespace DockerAdmin.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Fail to prune images: {ex.Message}");
+                _logger.LogError($"Fail to prune {option}: {ex.Message}");
             }
 
             return "Fail!";
+        }
+
+        public IEnumerable<ImageResumeModel> GetAllImages()
+        {
+            var imagesList = new List<ImageResumeModel>();
+
+            try
+            {
+                string result = ExecuteDockerCommand(CommandImageList);
+                var images = result.Split("\n").ToList().Skip(1);
+
+                if (!images.Any())
+                    return imagesList;
+
+                foreach (var image in images)
+                {
+                    var parts = Regex.Split(image, @"[\s+]{2,}");
+
+                    if (parts.Length == 5)
+                        imagesList.Add(new ImageResumeModel
+                        {
+                            Repository = parts[0],
+                            Tag = parts[1],
+                            Id = parts[2],
+                            Created = parts[3],
+                            Size = parts[4]
+                        });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fail to get images: {ex.Message}");
+            }
+
+            return imagesList;
+        }
+
+        public void DeleteImage(string id)
+        {
+            try
+            {
+                ExecuteDockerCommand(string.Format(CommandImageDelete, id));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fail to remove image {id}: {ex.Message}");
+            }
+        }
+
+        public void UpdateImage(string id)
+        {
+            try
+            {
+                ExecuteDockerCommand(string.Format(CommandImageUpdate, id));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Fail to remove image {id}: {ex.Message}");
+            }
         }
 
         private string ExecuteDockerCommand(string command)
