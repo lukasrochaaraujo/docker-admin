@@ -3,13 +3,11 @@
     ViewData["Title"] = "Logs";
 }
 
-<h2>
-    Container logs [@Model.ContainerId]
-    <a class="btn btn-link btn-sm" asp-action="Index">
-        back
-    </a>
-</h2>
+<h3>Container logs</h3>
+<h6>Container id @Model.ContainerId</h6>
 
-<pre style="background-color: #101010; color: #fff">
+<pre style="background-color: #101010; color: #fff; max-height: 400px;">
 @Model.Logs
 </pre>
+
+<a class="btn btn-light btn-sm" asp-action="Index"> back </a>

@@ -3,51 +3,92 @@
     ViewData["Title"] = "Dash";
 }
 
-<h2>Running containers</h2>
-<div class="text-center">
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead>
+<!-- RUNNING CONTAINERS TABLE -->
+<h3>Running containers</h3>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>CONTAINER ID</th>
+                <th>NAMES</th>
+                <th>IMAGE</th>
+                <th>CREATED</th>
+                <th>STATUS</th>
+                <th>PORTS</th>
+                <th>ACTIONS</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var container in Model.ActiveContainers)
+            {
                 <tr>
-                    <th>CONTAINER ID</th>
-                    <th>IMAGE</th>
-                    <th>CREATED</th>
-                    <th>STATUS</th>
-                    <th>PORTS</th>
-                    <th>NAMES</th>
-                    <th>ACTIONS</th>
+                    <td>@container.Id</td>
+                    <td>@container.Names</td>
+                    <td>@container.Image</td>
+                    <td>@container.Created</td>
+                    <td>@container.Status</td>
+                    <td>@container.Ports</td>
+                    <td>
+                        <a class="btn btn-warning btn-sm" 
+                            asp-action="RestartContainer"
+                            asp-route-id="@container.Id">
+                            restart
+                        </a>
+                        <a class="btn btn-danger btn-sm" 
+                            asp-action="StopContainer"
+                            asp-route-id="@container.Id">
+                            stop
+                        </a>
+                        <a class="btn btn-secondary btn-sm" 
+                            asp-action="LogsContainer"
+                            asp-route-id="@container.Id">
+                            logs
+                        </a>
+                        <a class="btn btn-info btn-sm" 
+                            asp-action="DetailsContainer"
+                            asp-route-id="@container.Id">
+                            details
+                        </a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach(var container in Model.ActiveContainers)
-                {
-                    <tr>
-                        <td>@container.Id</td>
-                        <td>@container.Image</td>
-                        <td>@container.Created</td>
-                        <td>@container.Status</td>
-                        <td>@container.Ports</td>
-                        <td>@container.Names</td>
-                        <td>
-                            <a class="btn btn-danger btn-sm" 
-                               asp-action="RestartContainer"
-                               asp-route-id="@container.Id">
-                               restart
-                           </a>
-                           <a class="btn btn-info btn-sm" 
-                               asp-action="MetricsContainer"
-                               asp-route-id="@container.Id">
-                               metrics
-                           </a>
-                           <a class="btn btn-secondary btn-sm" 
-                               asp-action="LogsContainer"
-                               asp-route-id="@container.Id">
-                               logs
-                           </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<!-- STOPPED CONTAINERS TABLE -->
+<h3>Stopped containers</h3>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>CONTAINER ID</th>
+                <th>NAMES</th>
+                <th>IMAGE</th>
+                <th>CREATED</th>
+                <th>STATUS</th>
+                <th>ACTIONS</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var container in Model.StoppedContainers)
+            {
+                <tr>
+                    <td>@container.Id</td>
+                    <td>@container.Names</td>
+                    <td>@container.Image</td>
+                    <td>@container.Created</td>
+                    <td>@container.Status</td>
+                    <td>
+                        <a class="btn btn-success btn-sm" 
+                            asp-action="StartContainer"
+                            asp-route-id="@container.Id">
+                            start
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

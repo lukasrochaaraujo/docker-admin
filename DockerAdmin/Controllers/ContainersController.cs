@@ -17,9 +17,25 @@ namespace DockerAdmin.Controllers
 
         public IActionResult Index()
         {
-            var viewModel = new ActiveContainersViewModel();
-            viewModel.ActiveContainers = _dockerService.GetAllRunningContainers();
-            return View(viewModel);
+            return View(new ActiveContainersViewModel
+            {
+                ActiveContainers = _dockerService.GetAllRunningContainers(),
+                StoppedContainers = _dockerService.GetAllStoppedContainers()
+            ));
+        }
+
+        [Route("start/{id}")]
+        public IActionResult StartContainer(string id)
+        {
+            _dockerService.StartContainer(id);
+            return RedirectToAction("Index");
+        }
+
+        [Route("stop/{id}")]
+        public IActionResult StopContainer(string id)
+        {
+            _dockerService.StopContainer(id);
+            return RedirectToAction("Index");
         }
 
         [Route("restart/{id}")]
@@ -29,21 +45,19 @@ namespace DockerAdmin.Controllers
             return RedirectToAction("Index");
         }
 
-        [Route("metrics/{id}")]
-        public IActionResult MetricsContainer(string id)
+        [Route("details/{id}")]
+        public IActionResult DetailsContainer(string id)
         {
-            _dockerService.GetContainerLogs(id);
             return RedirectToAction("Index");
         }
 
         [Route("logs/{id}")]
         public IActionResult LogsContainer(string id)
         {
-            var logs = _dockerService.GetContainerLogs(id);
             return View("Logs", new ContainerLogsViewModel
             {
                 ContainerId = id,
-                Logs = logs
+                Logs = _dockerService.GetContainerLogs(id)
             });
         }
 
